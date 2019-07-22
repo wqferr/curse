@@ -40,10 +40,13 @@ function love.draw()
     for dir, neighbor in pairs(neighbors) do
       text = text .. ('%s: %s, %s\n'):format(dir, neighbor.q, neighbor.r)
     end
-    dirToCenter = highlighted:directionTo(highlighted.grid:hex(4, 4))
-    text = text .. ('\n%s towards (4, 4)\n'):format(dirToCenter)
-    for _, linecell in ipairs(highlighted:line(dirToCenter)) do
-      text = text .. ('(%d, %d)\n'):format(linecell.q, linecell.r)
+    center = highlighted.grid:hex(4, 4)
+    dirToCenter = highlighted:directionTo(center)
+    if dirToCenter ~= nil then
+      text = text .. ('\n%s towards (4, 4)\n'):format(dirToCenter)
+      for _, linecell in ipairs(highlighted:line(dirToCenter, highlighted:distance(center)+1)) do
+        text = text .. ('(%d, %d)\n'):format(linecell.q, linecell.r)
+      end
     end
     love.graphics.print(text, 450, 350)
   end

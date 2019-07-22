@@ -278,4 +278,12 @@ function cell:line(dir, maxlen)
   return line
 end
 
+function cell:distance(other)
+  return math.max(
+    abs(self.cubecoords.x - other.cubecoords.x),
+    abs(self.cubecoords.y - other.cubecoords.y),
+    abs(self.cubecoords.z - other.cubecoords.z)
+  )
+end
+
 return curse
