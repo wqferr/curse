@@ -140,7 +140,7 @@ end
 function grid:addHex(q, r)
   local d = self.d
   local coordq, coordr = (q - 1), (r - 1) -- pixels are 0-based
-  local hex = {q=q, r=r}
+  local hex = {q=q, r=r, grid=self}
 
   local w = d * sqrt(3)
   local h = d * 3/2

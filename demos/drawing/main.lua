@@ -35,11 +35,14 @@ function love.draw()
   if (highlighted) then
     -- Redraw highlighted so it gets drawn on top of white lines
     drawHexagon(highlighted)
+    neighbors = highlighted.grid:directedNeighbors(highlighted.q, highlighted.r)
     text = ''
-    for dir, neighbor in pairs(rhombGrid:directedNeighbors(highlighted.q, highlighted.r)) do
-      text = text .. dir .. ': ' .. tostring(neighbor.q) .. ', ' .. tostring(neighbor.r) .. '\n'
+    for dir, neighbor in pairs(neighbors) do
+      text = text .. dir .. ': '
+      text = text .. tostring(neighbor.q) .. ', ' .. tostring(neighbor.r)
+      text = text .. '\n'
     end
-    love.graphics.print(text, 0, 0)
+    love.graphics.print(text, 450, 350)
   end
 end
 
