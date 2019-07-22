@@ -36,6 +36,19 @@ local ceil, floor = math.ceil, math.floor
 local cos, sin = math.cos, math.sin
 local sqrt, pi = math.sqrt, math.pi
 
+curse.directions = {
+  NE = { 1,-1},
+  E  = { 1, 0},
+  SE = { 0, 1},
+  SW = {-1, 1},
+  W  = {-1, 0},
+  NW = { 0,-1}
+}
+
+curse.direction_names = {
+  'NE', 'E', 'SE', 'SW', 'W', 'NW'
+}
+
 local function round(num)
   return floor(num+.5)
 end
@@ -184,12 +197,33 @@ function grid:hexIterator()
   end
 end
 
-function grid:neighbors(q, r)
+function grid:directedNeighbors(q, r)
+  neighbors = {}
+  for _, dir in ipairs(curse.direction_names) do
+    neighbor = self:neighbor(q, r, dir)
+    if neighbor ~= nil then
+      neighbors[dir] = neighbor
+    end
+  end
+  return neighbors
+end
 
+function grid:neighbors(q, r)
+  neighbors = {}
+  for _, dir in ipairs(curse.direction_names) do
+    neighbor = self:neighbor(q, r, dir)
+    if neighbor ~= nil then
+      table.insert(neighbors, neighbor)
+    end
+  end
+  return neighbors
 end
 
 function grid:neighbor(q, r, dir)
-
+  displacement = curse.directions[dir]
+  assert(displacement ~= nil, 'Illegal direction: '..tostring(dir))
+  dq, dr = unpack(displacement)
+  return self:getHex(q + dq, r + dr)
 end
 
 function grid:containingHex(x, y)

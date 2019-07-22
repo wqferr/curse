@@ -33,12 +33,21 @@ function love.draw()
   end
 
   if (highlighted) then
-    love.graphics.setColor(0,200,255,200)
+    -- Redraw highlighted so it gets drawn on top of white lines
     drawHexagon(highlighted)
+    text = ''
+    for dir, neighbor in pairs(rhombGrid:directedNeighbors(highlighted.q, highlighted.r)) do
+      text = text .. dir .. ': ' .. tostring(neighbor.q) .. ', ' .. tostring(neighbor.r) .. '\n'
+    end
+    love.graphics.print(text, 0, 0)
   end
 end
 
 function drawHexagon(hex)
+  local c = {love.graphics.getColor()}
+  if hex == highlighted then
+    love.graphics.setColor(0, 200, 255, 200)
+  end
   love.graphics.polygon(
     'line',
     hex.vertices[1].x, hex.vertices[1].y,
@@ -50,4 +59,5 @@ function drawHexagon(hex)
   )
 
   love.graphics.print(hex.q .. "," .. hex.r, hex.x - 10, hex.y - 7)
+  love.graphics.setColor(c)
 end
