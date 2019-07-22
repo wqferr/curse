@@ -85,8 +85,8 @@ end
 function curse.createRhomboidalGrid(width, height, hexSize, originX, originY)
   local g = grid:new(hexSize, originX, originY)
 
-  for q=1, width do
-    for r=1, height do
+  for q = 1, width do
+    for r = 1, height do
       g:addHex(q, r)
     end
   end
@@ -103,12 +103,12 @@ function curse.createRectangularGrid(width, height, hexSize, originX, originY)
 
   local g = grid:new(hexSize, ox, oy)
 
-  for r=1, height do
+  for r = 1, height do
     local rspill = ceil(r/2) - 1
     local qmin = spill - rspill + 1
     local qmax = qmin + width - 1
 
-    for q=qmin, qmax do
+    for q = qmin, qmax do
       g:addHex(q, r)
     end
   end
@@ -125,11 +125,11 @@ function curse.createHexagonalGrid(diameter, hexSize, originX, originY)
 
   local g = grid:new(hexSize, ox, oy)
 
-  for r=1, diameter do
+  for r = 1, diameter do
     local qmin = max(spill - (r - 1), 0) + 1
     local qmax = diameter - max(-spill + (r - 1), 0)
 
-    for q=qmin, qmax do
+    for q = qmin, qmax do
       g:addHex(q, r)
     end
   end
@@ -153,7 +153,7 @@ function grid:addHex(q, r)
   hex.y = (h * coordr) + self.originY
   hex.vertices = {}
 
-  for i=0, 6 do
+  for i = 0, 6 do
     local angle = 2 * pi / 6 * (i + 0.5)
     local x = hex.x + (d * cos(angle))
     local y = hex.y + (d * sin(angle))
@@ -182,11 +182,11 @@ function grid:hexIterator()
   local r = 1
 
   return function()
-    for iq=q, self.maxQ do
+    for iq = q, self.maxQ do
       if self[iq] ~= nil then
         q = iq
 
-        for ir=r, self.maxR do
+        for ir = r, self.maxR do
           if self[iq][ir] ~= nil then
             r = ir + 1
             return self[iq][ir]
@@ -240,7 +240,7 @@ function cell:neighbor(dir)
   return self.grid:hex(self.q + dq, self.r + dr)
 end
 
-function cell:directionTo(other)
+function cell:direction(other)
   if other.q == self.q and other.r == self.r then
     return nil, 'cells are the same'
   elseif other.cubecoords.x == self.cubecoords.x then

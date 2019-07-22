@@ -41,7 +41,7 @@ function love.draw()
       text = text .. ('%s: %s, %s\n'):format(dir, neighbor.q, neighbor.r)
     end
     center = highlighted.grid:hex(4, 4)
-    dirToCenter = highlighted:directionTo(center)
+    dirToCenter = highlighted:direction(center)
     if dirToCenter ~= nil then
       text = text .. ('\n%s towards (4, 4)\n'):format(dirToCenter)
       for _, linecell in ipairs(highlighted:line(dirToCenter, highlighted:distance(center)+1)) do
