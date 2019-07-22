@@ -210,4 +210,34 @@ function grid:containingHex(x, y)
   return self:hex(q, r)
 end
 
+function cell:directedNeighbors()
+  neighbors = {}
+  for _, dir in ipairs(curse.direction_names) do
+    neighbor = self:neighbor(dir)
+    if neighbor ~= nil then
+      neighbors[dir] = neighbor
+    end
+  end
+  return neighbors
+end
+
+function cell:neighbors()
+  neighbors = {}
+  for _, dir in ipairs(curse.direction_names) do
+    neighbor = self:neighbor(dir)
+    if neighbor ~= nil then
+      table.insert(neighbors, neighbor)
+    end
+  end
+  return neighbors
+end
+
+function cell:neighbor(dir)
+  displacement = curse.directions[dir]
+  assert(displacement ~= nil, 'Illegal direction: '..tostring(dir))
+  dq, dr = unpack(displacement)
+  return self.grid:hex(self.q + dq, self.r + dr)
+end
+
+
 return curse
