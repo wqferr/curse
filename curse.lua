@@ -266,4 +266,16 @@ function cell:directionTo(other)
   end
 end
 
+function cell:line(dir, maxlen)
+  maxlen = maxlen or math.huge
+  assert(curse.directions[dir] ~= nil, ('illegal direction: %s'):format(dir))
+  last = self
+  line = {}
+  repeat
+    table.insert(line, last)
+    last = last:neighbor(dir)
+  until last == nil or #line >= maxlen
+  return line
+end
+
 return curse
