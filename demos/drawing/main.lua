@@ -35,7 +35,7 @@ function love.draw()
   if (highlighted) then
     -- Redraw highlighted so it gets drawn on top of white lines
     drawHexagon(highlighted)
-    neighbors = highlighted.grid:directedNeighbors(highlighted.q, highlighted.r)
+    neighbors = highlighted:directedNeighbors()
     text = ''
     for dir, neighbor in pairs(neighbors) do
       text = text .. dir .. ': '

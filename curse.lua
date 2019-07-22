@@ -31,6 +31,9 @@ local curse = {
 local grid = {}
 local gridMt = {__index = grid}
 
+local cell = {}
+local cellMt = {__index = cell}
+
 local abs, min, max = math.abs, math.min, math.max
 local ceil, floor = math.ceil, math.floor
 local cos, sin = math.cos, math.sin
@@ -69,6 +72,12 @@ local function roundToNearestHex(q, r)
   end
 
   return rx, ry
+end
+
+local function createHex(grid, q, r)
+  hex = {q=q, r=r, grid=grid}
+  setmetatable(hex, cellMt)
+  return hex
 end
 
 function curse.createRhomboidalGrid(width, height, hexSize, originX, originY)
@@ -140,7 +149,7 @@ end
 function grid:addHex(q, r)
   local d = self.d
   local coordq, coordr = (q - 1), (r - 1) -- pixels are 0-based
-  local hex = {q=q, r=r, grid=self}
+  local hex = createHex(self, q, r)
 
   local w = d * sqrt(3)
   local h = d * 3/2
@@ -197,10 +206,10 @@ function grid:hexIterator()
   end
 end
 
-function grid:directedNeighbors(q, r)
+function cell:directedNeighbors()
   neighbors = {}
   for _, dir in ipairs(curse.direction_names) do
-    neighbor = self:neighbor(q, r, dir)
+    neighbor = self:neighbor(dir)
     if neighbor ~= nil then
       neighbors[dir] = neighbor
     end
@@ -208,10 +217,10 @@ function grid:directedNeighbors(q, r)
   return neighbors
 end
 
-function grid:neighbors(q, r)
+function cell:neighbors()
   neighbors = {}
   for _, dir in ipairs(curse.direction_names) do
-    neighbor = self:neighbor(q, r, dir)
+    neighbor = self:neighbor(dir)
     if neighbor ~= nil then
       table.insert(neighbors, neighbor)
     end
@@ -219,11 +228,11 @@ function grid:neighbors(q, r)
   return neighbors
 end
 
-function grid:neighbor(q, r, dir)
+function cell:neighbor(dir)
   displacement = curse.directions[dir]
   assert(displacement ~= nil, 'Illegal direction: '..tostring(dir))
   dq, dr = unpack(displacement)
-  return self:hex(q + dq, r + dr)
+  return self.grid:hex(self.q + dq, self.r + dr)
 end
 
 function grid:containingHex(x, y)
