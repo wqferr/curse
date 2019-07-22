@@ -163,7 +163,7 @@ function grid:addHex(q, r)
   return hex
 end
 
-function grid:getHex(q, r)
+function grid:hex(q, r)
   local row = self[q]
   if (row ~= nil) then
     return row[r]
@@ -223,7 +223,7 @@ function grid:neighbor(q, r, dir)
   displacement = curse.directions[dir]
   assert(displacement ~= nil, 'Illegal direction: '..tostring(dir))
   dq, dr = unpack(displacement)
-  return self:getHex(q + dq, r + dr)
+  return self:hex(q + dq, r + dr)
 end
 
 function grid:containingHex(x, y)
@@ -232,7 +232,7 @@ function grid:containingHex(x, y)
   local r = 1 + (2/3 * y / self.d)
   q, r = roundToNearestHex(q, r)
 
-  return self:getHex(q, r)
+  return self:hex(q, r)
 end
 
 return curse
