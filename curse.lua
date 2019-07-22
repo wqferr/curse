@@ -1,7 +1,7 @@
 local curse = {
   _VERSION     = 'curse 0.0.1',
   _DESCRIPTION = 'A hexagonal grid library for LÖVE',
-  _URL         = 'https://github.com/colinmarc/curse',
+  _URL         = 'https://github.com/wqferr/curse',
   _LICENSE     = [[
     MIT LICENSE
 
@@ -194,13 +194,11 @@ end
 
 function grid:containingHex(x, y)
   local x, y = x - self.originX, y - self.originY
-  local q = ((1/3 * sqrt(3) * x) - (1/3 * y)) / self.d
-  local r = 2/3 * y / self.d
+  local q = 1 + (((1/3 * sqrt(3) * x) - (1/3 * y)) / self.d)
+  local r = 1 + (2/3 * y / self.d)
   q, r = roundToNearestHex(q, r)
 
-  -- print(x .. ", " .. y .. " translates to " .. q .. ", " .. r)
-
-  return self:getHex(q+1, r+1)
+  return self:getHex(q, r)
 end
 
 return curse
