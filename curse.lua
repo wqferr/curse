@@ -123,7 +123,6 @@ function curse.createHexagonalGrid(diameter, hexSize, originX, originY)
 
   local g = grid:new(hexSize, ox, oy)
 
-
   for r=1, diameter do
     local qmin = max(spill - (r - 1), 0) + 1
     local qmax = diameter - max(-spill + (r - 1), 0)
@@ -135,11 +134,6 @@ function curse.createHexagonalGrid(diameter, hexSize, originX, originY)
 
   return g
 end
---
--- function curse.createGrid(coordinates, hexSize)
---   local g = setmetatable({hexSize=hexSize}, gridMt)
---   return g
--- end
 
 function grid:new(hexSize, originX, originY)
   local g = {d=hexSize, originX=(originX or 0), originY=(originY or 0), maxQ=0, maxR=0}
@@ -204,35 +198,6 @@ function grid:hexIterator()
 
     return nil
   end
-end
-
-function cell:directedNeighbors()
-  neighbors = {}
-  for _, dir in ipairs(curse.direction_names) do
-    neighbor = self:neighbor(dir)
-    if neighbor ~= nil then
-      neighbors[dir] = neighbor
-    end
-  end
-  return neighbors
-end
-
-function cell:neighbors()
-  neighbors = {}
-  for _, dir in ipairs(curse.direction_names) do
-    neighbor = self:neighbor(dir)
-    if neighbor ~= nil then
-      table.insert(neighbors, neighbor)
-    end
-  end
-  return neighbors
-end
-
-function cell:neighbor(dir)
-  displacement = curse.directions[dir]
-  assert(displacement ~= nil, 'Illegal direction: '..tostring(dir))
-  dq, dr = unpack(displacement)
-  return self.grid:hex(self.q + dq, self.r + dr)
 end
 
 function grid:containingHex(x, y)
