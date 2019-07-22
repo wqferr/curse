@@ -77,6 +77,7 @@ end
 
 local function createHex(grid, q, r)
   hex = {q=q, r=r, grid=grid}
+  hex.cubecoords = {x=q, y=-q-r, z=r}
   setmetatable(hex, cellMt)
   return hex
 end
@@ -239,5 +240,30 @@ function cell:neighbor(dir)
   return self.grid:hex(self.q + dq, self.r + dr)
 end
 
+function cell:directionTo(other)
+  if other.q == self.q and other.r == self.r then
+    return nil, 'cells are the same'
+  elseif other.cubecoords.x == self.cubecoords.x then
+    if other.cubecoords.z > self.cubecoords.z then
+      return 'SE'
+    else
+      return 'NW'
+    end
+  elseif other.cubecoords.y == self.cubecoords.y then
+    if other.x > self.x then
+      return 'NE'
+    else
+      return 'SW'
+    end
+  elseif other.cubecoords.z == self.cubecoords.z then
+    if other.cubecoords.x > self.cubecoords.x then
+      return 'E'
+    else
+      return 'W'
+    end
+  else
+    return nil, 'cells are not aligned along any axis'
+  end
+end
 
 return curse

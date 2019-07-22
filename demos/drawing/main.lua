@@ -42,6 +42,9 @@ function love.draw()
       text = text .. tostring(neighbor.q) .. ', ' .. tostring(neighbor.r)
       text = text .. '\n'
     end
+    text = text .. ('\n%s to (4, 4)'):format(
+      highlighted:directionTo(highlighted.grid:hex(4, 4))
+    )
     love.graphics.print(text, 450, 350)
   end
 end
