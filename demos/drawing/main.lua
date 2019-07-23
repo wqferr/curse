@@ -2,35 +2,35 @@
 curse = require 'curse'
 
 function love.load()
-  rhombGrid = curse.createRhomboidalGrid(7, 7, 20, 50, 50)
-  rectGrid = curse.createRectangularGrid(7, 7, 20, 50, 350)
-  hexGrid = curse.createHexagonalGrid(7, 20, 450, 50)
+  rhombGrid = curse.createRhomboidalGrid(7, 7, 32, 50, 50)
+  -- rectGrid = curse.createRectangularGrid(7, 7, 32, 50, 350)
+  -- hexGrid = curse.createHexagonalGrid(7, 32, 450, 50)
 end
 
 function love.update()
   mx, my = love.mouse.getPosition()
-  highlighted = rhombGrid:containingHex(mx, my) or rectGrid:containingHex(mx, my) or hexGrid:containingHex(mx, my)
+  highlighted = rhombGrid:containingHex(mx, my) -- or rectGrid:containingHex(mx, my) or hexGrid:containingHex(mx, my)
 end
 
 function love.draw()
   love.graphics.setColor(0,200,255,200)
-  love.graphics.line(0,50,1000,50)
-  love.graphics.line(0,350,1000,350)
-  love.graphics.line(50,0,50,1000)
-  love.graphics.line(450,0,450,1000)
+  -- love.graphics.line(0,50,1000,50)
+  -- love.graphics.line(0,350,1000,350)
+  -- love.graphics.line(50,0,50,1000)
+  -- love.graphics.line(450,0,450,1000)
 
   love.graphics.setColor(255,255,255,255)
   for hex in rhombGrid:hexIterator() do
     drawHexagon(hex)
   end
 
-  for hex in rectGrid:hexIterator() do
-    drawHexagon(hex)
-  end
+  -- for hex in rectGrid:hexIterator() do
+  --   drawHexagon(hex)
+  -- end
 
-  for hex in hexGrid:hexIterator() do
-    drawHexagon(hex)
-  end
+  -- for hex in hexGrid:hexIterator() do
+  --   drawHexagon(hex)
+  -- end
 
   if (highlighted) then
     -- Redraw highlighted so it gets drawn on top of white lines
@@ -48,7 +48,7 @@ function love.draw()
         text = text .. ('(%d, %d)\n'):format(linecell.q, linecell.r)
       end
     end
-    love.graphics.print(text, 450, 350)
+    love.graphics.print(text, 100, 350)
   end
 end
 
@@ -67,6 +67,6 @@ function drawHexagon(hex)
     hex.vertices[6].x, hex.vertices[6].y
   )
 
-  love.graphics.print(hex.q .. "," .. hex.r, hex.x - 10, hex.y - 7)
+  love.graphics.print(('(%d, %d)'):format(hex.q, hex.r), hex.x - 17, hex.y - 7)
   love.graphics.setColor(c)
 end
