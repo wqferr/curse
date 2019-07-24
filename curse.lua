@@ -1,5 +1,5 @@
 local curse = {
-  _VERSION     = 'curse 0.1.0',
+  _VERSION     = 'curse 0.2.2',
   _DESCRIPTION = 'A hexagonal grid library for LÖVE',
   _URL         = 'https://github.com/wqferr/curse',
   _LICENSE     = [[
