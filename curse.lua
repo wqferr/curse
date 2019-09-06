@@ -82,6 +82,13 @@ local function createHex(grid, q, r)
   return hex
 end
 
+local function getCreationFunction(mapType)
+  local mapType = mapType:lower()
+  local capitalizedMapType = mapType:gsub('^%l', string.upper)
+  local functionName = 'create'..capitalizedMapType..'Grid'
+  return curse[functionName]
+end
+
 function curse.createRhomboidalGrid(width, height, hexSize, originX, originY)
   local g = grid:new(hexSize, originX, originY)
 
@@ -135,6 +142,14 @@ function curse.createHexagonalGrid(diameter, hexSize, originX, originY)
   end
 
   return g
+end
+
+function curse.load(description)
+  local createMapFunction = getCreationFunction(description.mapType)
+  local creationArgs = description.creationArgs
+  local map = assert(createMap(creationArgs))
+  map:loadTerrain(description.terrain) -- TODO
+  map:loadObjects(description.objects) -- TODO
 end
 
 function grid:new(hexSize, originX, originY)
