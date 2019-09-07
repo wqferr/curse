@@ -89,8 +89,13 @@ local function getCreationFunction(mapType)
   return curse[functionName]
 end
 
-function curse.createRhomboidalGrid(width, height, hexSize, originX, originY)
-  local g = grid:new(hexSize, originX, originY)
+local function widthToRadius(w)
+  return w * sqrt(3)/3
+end
+
+function curse.createRhomboidalGrid(width, height, hexWidth, originX, originY)
+  local hexSize = widthToRadius(hexWidth)
+  local g = grid:new(hexWidth, originX, originY)
 
   for q = 1, width do
     for r = 1, height do
@@ -101,14 +106,15 @@ function curse.createRhomboidalGrid(width, height, hexSize, originX, originY)
   return g
 end
 
-function curse.createRectangularGrid(width, height, hexSize, originX, originY)
+function curse.createRectangularGrid(width, height, hexWidth, originX, originY)
   -- move the origin to the left, so that the top-left hex can be spill,1
   -- this means the bottom-left hex will be 1,height
+  local hexSize = widthToRadius(hexWidth)
   local spill = ceil(height/2) - 1
   local ox = (originX or 0) - (hexSize * sqrt(3) * spill)
   local oy = originY or 0
 
-  local g = grid:new(hexSize, ox, oy)
+  local g = grid:new(hexWidth, ox, oy)
 
   for r = 1, height do
     local rspill = ceil(r/2) - 1
@@ -123,14 +129,15 @@ function curse.createRectangularGrid(width, height, hexSize, originX, originY)
   return g
 end
 
-function curse.createHexagonalGrid(diameter, hexSize, originX, originY)
+function curse.createHexagonalGrid(diameter, hexWidth, originX, originY)
   assert(diameter % 2 == 1, "Hexagonal grid diameter must be odd!")
 
+  local hexSize = widthToRadius(hexWidth)
   local spill = floor(diameter/2)
   local ox = (originX or 0) - (hexSize * sqrt(3) * spill / 2)
   local oy = originY or 0
 
-  local g = grid:new(hexSize, ox, oy)
+  local g = grid:new(hexWidth, ox, oy)
 
   for r = 1, diameter do
     local qmin = max(spill - (r - 1), 0) + 1
@@ -152,8 +159,16 @@ function curse.load(description)
   map:loadObjects(description.objects) -- TODO
 end
 
-function grid:new(hexSize, originX, originY)
-  local g = {d=hexSize, originX=(originX or 0), originY=(originY or 0), maxQ=0, maxR=0}
+function grid:new(hexWidth, originX, originY)
+  local hexSize = widthToRadius(hexWidth)
+  local g = {
+    d=hexSize,
+    w=hexWidth,
+    originX=(originX or 0),
+    originY=(originY or 0),
+    maxQ=0,
+    maxR=0
+  }
   return setmetatable(g, gridMt)
 end
 
