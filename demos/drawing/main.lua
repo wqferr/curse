@@ -2,7 +2,7 @@
 curse = require 'curse'
 
 function love.load()
-  rhombGrid = curse.createRhomboidalGrid(7, 7, 32, 50, 50)
+  rhombGrid = curse.createRhomboidalGrid(7, 7, 64, 50, 50)
   -- rectGrid = curse.createRectangularGrid(7, 7, 32, 50, 350)
   -- hexGrid = curse.createHexagonalGrid(7, 32, 450, 50)
 end
@@ -13,6 +13,7 @@ function love.update()
 end
 
 function love.draw()
+  love.graphics.line(300, 500, 364, 500)
   love.graphics.setColor(0,200,255,200)
   -- love.graphics.line(0,50,1000,50)
   -- love.graphics.line(0,350,1000,350)

@@ -40,6 +40,9 @@ local ceil, floor = math.ceil, math.floor
 local cos, sin = math.cos, math.sin
 local sqrt, pi = math.sqrt, math.pi
 
+local ROOT_3 = sqrt(3)
+local INV_ROOT_3 = ROOT_3 / 3
+
 curse.directions = {
   NE = { 1,-1},
   E  = { 1, 0},
@@ -90,11 +93,10 @@ local function getCreationFunction(mapType)
 end
 
 local function widthToRadius(w)
-  return w * sqrt(3)/3
+  return w * INV_ROOT_3
 end
 
 function curse.createRhomboidalGrid(width, height, hexWidth, originX, originY)
-  local hexSize = widthToRadius(hexWidth)
   local g = grid:new(hexWidth, originX, originY)
 
   for q = 1, width do
@@ -109,9 +111,8 @@ end
 function curse.createRectangularGrid(width, height, hexWidth, originX, originY)
   -- move the origin to the left, so that the top-left hex can be spill,1
   -- this means the bottom-left hex will be 1,height
-  local hexSize = widthToRadius(hexWidth)
   local spill = ceil(height/2) - 1
-  local ox = (originX or 0) - (hexSize * sqrt(3) * spill)
+  local ox = (originX or 0) - (hexWidth * spill)
   local oy = originY or 0
 
   local g = grid:new(hexWidth, ox, oy)
@@ -132,9 +133,8 @@ end
 function curse.createHexagonalGrid(diameter, hexWidth, originX, originY)
   assert(diameter % 2 == 1, "Hexagonal grid diameter must be odd!")
 
-  local hexSize = widthToRadius(hexWidth)
   local spill = floor(diameter/2)
-  local ox = (originX or 0) - (hexSize * sqrt(3) * spill / 2)
+  local ox = (originX or 0) - (hexWidth * spill / 2)
   local oy = originY or 0
 
   local g = grid:new(hexWidth, ox, oy)
@@ -177,7 +177,7 @@ function grid:addHex(q, r)
   local coordq, coordr = (q - 1), (r - 1) -- pixels are 0-based
   local hex = createHex(self, q, r)
 
-  local w = d * sqrt(3)
+  local w = self.w
   local h = d * 3/2
   hex.x = (w * (coordq + coordr/2)) + self.originX
   hex.y = (h * coordr) + self.originY
@@ -234,7 +234,7 @@ end
 
 function grid:containingHex(x, y)
   local x, y = x - self.originX, y - self.originY
-  local q = 1 + (((1/3 * sqrt(3) * x) - (1/3 * y)) / self.d)
+  local q = 1 + (((x * INV_ROOT_3) - (1/3 * y)) / self.d)
   local r = 1 + (2/3 * y / self.d)
   q, r = roundToNearestHex(q, r)
 
