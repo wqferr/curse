@@ -190,6 +190,8 @@ function grid:addHex(q, r)
     hex.vertices[i] = {x=x, y=y}
   end
 
+  hex.center = (hex.vertices[1] + hex.vertices[4]) / 2
+
   self[q] = self[q] or {}
   self[q][r] = hex
   self.maxQ = max(self.maxQ, q)
