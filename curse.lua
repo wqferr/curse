@@ -42,14 +42,15 @@ local sqrt, pi = math.sqrt, math.pi
 
 local ROOT_3 = sqrt(3)
 local INV_ROOT_3 = ROOT_3 / 3
+local Point = require 'point'
 
 curse.directions = {
-  NE = { 1,-1},
-  E  = { 1, 0},
-  SE = { 0, 1},
-  SW = {-1, 1},
-  W  = {-1, 0},
-  NW = { 0,-1}
+  NE = Point( 1,-1),
+  E  = Point( 1, 0),
+  SE = Point( 0, 1),
+  SW = Point(-1, 1),
+  W  = Point(-1, 0),
+  NW = Point( 0,-1)
 }
 
 curse.direction_names = {
@@ -179,21 +180,17 @@ function grid:addHex(q, r)
 
   local w = self.w
   local h = d * 3/2
-  hex.x = (w * (coordq + coordr/2)) + self.originX
-  hex.y = (h * coordr) + self.originY
+  hex.center = Point(
+    (w * (coordq + coordr/2)) + self.originX,
+    (h * coordr) + self.originY
+  )
   hex.vertices = {}
 
   for i = 0, 6 do
     local angle = 2 * pi / 6 * (i + 0.5)
-    local x = hex.x + (d * cos(angle))
-    local y = hex.y + (d * sin(angle))
-    hex.vertices[i] = {x=x, y=y}
+    local vertexOffset = d * Point(cos(angle), sin(angle))
+    hex.vertices[i] = hex.center + vertexOffset
   end
-
-  hex.center = {
-    x = (hex.vertices[1].x + hex.vertices[4].x) / 2,
-    y = (hex.vertices[1].y + hex.vertices[4].y) / 2,
-  }
 
   self[q] = self[q] or {}
   self[q][r] = hex
@@ -285,7 +282,7 @@ function cell:direction(other)
       return 'NW'
     end
   elseif other.cubecoords.y == self.cubecoords.y then
-    if other.x > self.x then
+    if other.cubecoords.x > self.cubecoords.x then
       return 'NE'
     else
       return 'SW'

@@ -68,6 +68,6 @@ function drawHexagon(hex)
     hex.vertices[6].x, hex.vertices[6].y
   )
 
-  love.graphics.print(('(%d, %d)'):format(hex.q, hex.r), hex.x - 17, hex.y - 7)
+  love.graphics.print(('(%d, %d)'):format(hex.q, hex.r), hex.center.x - 17, hex.center.y - 7)
   love.graphics.setColor(c)
 end
