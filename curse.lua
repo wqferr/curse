@@ -190,7 +190,10 @@ function grid:addHex(q, r)
     hex.vertices[i] = {x=x, y=y}
   end
 
-  hex.center = (hex.vertices[1] + hex.vertices[4]) / 2
+  hex.center = {
+    x = (hex.vertices[1].x + hex.vertices[4].x) / 2,
+    y = (hex.vertices[1].y + hex.vertices[4].y) / 2,
+  }
 
   self[q] = self[q] or {}
   self[q][r] = hex
